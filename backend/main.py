@@ -47,3 +47,8 @@ async def analisar(dados: DadosSaude):
         ],
         "faixa_saudavel": {"max": peso_ideal_max}
     }
+
+if __name__ == "__main__":
+    # IMPORTANTE: O Render exige que o host seja '0.0.0.0' e a porta venha da variável de ambiente
+    port = int(os.environ.get("PORT", 5000))
+    app.run(host='0.0.0.0', port=port)
