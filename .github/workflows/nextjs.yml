@@ -25,22 +25,28 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: "20"
-          # Removi a linha de cache que estava causando o erro
 
-      - name: Setup Pages
-        uses: actions/configure-pages@v5
-        with:
-          static_site_generator: next
-
-      - name: Install dependencies
-        run: npm install
-
-      - name: Build with Next.js
-        run: npx next build
+      - name: Install and Build
+        run: |
+          # 1. Tenta encontrar a pasta que contém o package.json
+          # Se o seu projeto estiver em uma pasta chamada 'Calculadora-de-Imc', ele entrará nela.
+          PROJECT_DIR=$(find . -name "package.json" -not -path "*/node_modules/*" -exec dirname {} \;)
+          echo "Diretório do projeto encontrado: $PROJECT_DIR"
+          cd $PROJECT_DIR
+          
+          # 2. Instala e constrói
+          npm install
+          npx next build
+          
+          # 3. Garante que a pasta 'out' esteja no lugar certo para o upload
+          if [ "$PROJECT_DIR" != "." ]; then
+            cp -r out $GITHUB_WORKSPACE/
+          fi
 
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:
+          # O upload sempre buscará a pasta 'out' na raiz agora
           path: ./out
 
   deploy:
