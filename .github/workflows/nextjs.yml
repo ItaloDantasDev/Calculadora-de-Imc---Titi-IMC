@@ -26,6 +26,12 @@ jobs:
         with:
           node-version: "20"
 
+      - name: Setup Pages
+        uses: actions/configure-pages@v5
+        with:
+          # Isso aqui força o Next.js a entender o nome do seu repositório
+          static_site_generator: next
+
       - name: Install and Build
         working-directory: ./frontend
         run: |
@@ -35,7 +41,6 @@ jobs:
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:
-          # O Next.js com output: export gera a pasta dentro de frontend/out
           path: ./frontend/out
 
   deploy:
