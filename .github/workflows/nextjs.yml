@@ -27,27 +27,16 @@ jobs:
           node-version: "20"
 
       - name: Install and Build
+        working-directory: ./frontend
         run: |
-          # 1. Tenta encontrar a pasta que contém o package.json
-          # Se o seu projeto estiver em uma pasta chamada 'Calculadora-de-Imc', ele entrará nela.
-          PROJECT_DIR=$(find . -name "package.json" -not -path "*/node_modules/*" -exec dirname {} \;)
-          echo "Diretório do projeto encontrado: $PROJECT_DIR"
-          cd $PROJECT_DIR
-          
-          # 2. Instala e constrói
           npm install
           npx next build
-          
-          # 3. Garante que a pasta 'out' esteja no lugar certo para o upload
-          if [ "$PROJECT_DIR" != "." ]; then
-            cp -r out $GITHUB_WORKSPACE/
-          fi
 
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:
-          # O upload sempre buscará a pasta 'out' na raiz agora
-          path: ./out
+          # O Next.js com output: export gera a pasta dentro de frontend/out
+          path: ./frontend/out
 
   deploy:
     environment:
