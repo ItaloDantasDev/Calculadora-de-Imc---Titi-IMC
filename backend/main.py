@@ -51,6 +51,6 @@ async def analisar(dados: DadosSaude):
     }
 
 if __name__ == "__main__":
-    # IMPORTANTE: O Render exige que o host seja '0.0.0.0' e a porta venha da variável de ambiente
-    port = int(os.environ.get("PORT", 5000))
-    app.run(host='0.0.0.0', port=port)
+    # O FastAPI usa o uvicorn para rodar
+    port = int(os.environ.get("PORT", 8000))
+    uvicorn.run(app, host="0.0.0.0", port=port)
